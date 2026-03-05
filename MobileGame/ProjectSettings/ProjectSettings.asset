@@ -865,12 +865,12 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: cf386923-3162-4c29-9d73-f773eb89d54f
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: MobileGame
   organizationId: unity_fad17543a22a779d250b
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

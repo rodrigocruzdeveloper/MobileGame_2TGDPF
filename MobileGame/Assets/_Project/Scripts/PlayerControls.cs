@@ -6,6 +6,13 @@ public class PlayerControls : MonoBehaviour
     private Vector2 touchStart;
     private Vector2 touchEnd;
 
+    Player player;
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();    
+    }
+
     private void Update()
     {
         if(Input.touchCount == 0) 
@@ -31,20 +38,17 @@ public class PlayerControls : MonoBehaviour
         else if(touch.phase == TouchPhase.Ended)
         {
             Vector2 touchValue = (touchEnd - touchStart);
-            print("Valor da subtração: " + touchValue);
-
-            
+       
             if(Mathf.Abs(touchValue.x) > Mathf.Abs(touchValue.y))
             {
                 // MOVIMENTO HORIZONTAL  (ESQUERDA OU DIREITA)
-
                 if (touchStart.x < touchEnd.x) 
                 {
-                    print("Direita");
+                    player.ChangeLane(1);
                 }
                 else
                 {
-                    print("Esquerda");
+                    player.ChangeLane(-1);
                 }
 
             }
@@ -53,11 +57,11 @@ public class PlayerControls : MonoBehaviour
                 // VERTICAL
                 if (touchStart.y < touchEnd.y)
                 {
-                    print("Cima");
+                    
                 }
                 else
                 {
-                    print("Baixo");
+                    
                 }
             }
 
