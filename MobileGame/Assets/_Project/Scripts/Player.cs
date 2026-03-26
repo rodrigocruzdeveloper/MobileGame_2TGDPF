@@ -3,51 +3,47 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Player Settings")]
+    [SerializeField] private GameObject playerMesh;
     [SerializeField] private float speed;
     [SerializeField] private float stepSpeed;
     [SerializeField] private float currentLane = 0;
     [SerializeField] private float laneLimit = 1;
 
-    [Header("Controller Settings")]
-    [SerializeField] private float gravity = -9.8f;
-    [SerializeField] private Vector3 movement;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private float jumpHeight = 2.0f;
+    [Header("Jump Settings")]
+    [SerializeField] private Transform sensorGround;
+    [SerializeField] private float sensorRadius;
+
 
 
     private Vector3 currentPosition;
-    private CharacterController characterController;
+
+    private Animator anim;
 
     private void Start()
-    {
-        characterController = GetComponent<CharacterController>();
+    {        
+        anim = playerMesh.GetComponent<Animator>();
         currentPosition = transform.position;
     }
 
-
     private void Update()
     {
-        // MOVE ENTRE AS PISTAS
-        //currentPosition = new Vector3(currentLane, currentPosition.y, currentPosition.z); 
-        //transform.position = Vector3.MoveTowards(transform.position, currentPosition, stepSpeed * Time.deltaTime);
-
-        // VERIFICA SE ESTA NO CHÃO
-        isGrounded = characterController.isGrounded;
-
-        // PULO
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if (GameManager.inGame)
         {
-            movement.y += jumpHeight;
+            Move();
+            anim.SetBool("pInGame", GameManager.inGame);
         }
-        else
-        {
-            // GRAVIDADE
-            movement.y += gravity * Time.deltaTime;
-        }
+    }
 
-        // ATUALIZAÇÃO DO CHARACTER CONTROLLER
-        characterController.Move(movement * Time.deltaTime);
 
+    void OnGround()
+    {
+        // Physics.OverlapSphere(sensorGround.position, sensorRadius, 1 << LayerMask.NameToLayer("Ground"));
+    }
+
+    private void Move()
+    {        
+        currentPosition = new Vector3(currentLane, currentPosition.y, currentPosition.z);
+        transform.position = Vector3.MoveTowards(transform.position, currentPosition, stepSpeed * Time.deltaTime);
     }
 
     public void ChangeLane(int direction)
@@ -67,4 +63,15 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+
+        if (sensorGround != null) 
+        {
+            Gizmos.DrawSphere(sensorGround.position, sensorRadius);
+        }       
+    }
+
 }

@@ -1,0 +1,33 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UIManager : MonoBehaviour
+{
+    [Header("Canvas Delay Settings")]
+    [SerializeField] private Canvas canvasDelay;
+    [SerializeField] private Text textDelay;
+
+    
+    void Start()
+    {
+        canvasDelay.enabled = true;        
+    }
+
+
+    void Update()
+    {
+        if (!GameManager.inGame)
+        {
+            textDelay.text = GameManager.delayStartGame.ToString();
+
+            if(GameManager.delayStartGame == 0)
+            {
+                textDelay.text = "GO!";
+            }
+        }
+        else
+        {
+            canvasDelay.enabled = false;
+        }
+    }
+}
