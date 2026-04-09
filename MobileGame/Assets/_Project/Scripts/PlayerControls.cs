@@ -54,10 +54,10 @@ public class PlayerControls : MonoBehaviour
             }
             else
             {
-                // VERTICAL
+                // VERTICAL (CIMA / BAIXO)
                 if (touchStart.y < touchEnd.y)
                 {
-                    
+                    player.Jump();
                 }
                 else
                 {

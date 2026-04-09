@@ -12,15 +12,19 @@ public class Player : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] private Transform sensorGround;
     [SerializeField] private float sensorRadius;
+    [SerializeField] private float jumpForce;
 
 
 
     private Vector3 currentPosition;
 
     private Animator anim;
+    private Rigidbody rb;
 
     private void Start()
-    {        
+    {
+        rb = playerMesh.GetComponent<Rigidbody>();
+        
         anim = playerMesh.GetComponent<Animator>();
         currentPosition = transform.position;
     }
@@ -34,16 +38,23 @@ public class Player : MonoBehaviour
         }
     }
 
-
-    void OnGround()
+    bool OnGround()
     {
-        // Physics.OverlapSphere(sensorGround.position, sensorRadius, 1 << LayerMask.NameToLayer("Ground"));
+        return Physics.CheckSphere(sensorGround.position, sensorRadius, 1 << LayerMask.NameToLayer("Ground"));
     }
 
     private void Move()
     {        
+        // MOVE NAS LATERAIS
         currentPosition = new Vector3(currentLane, currentPosition.y, currentPosition.z);
+
+        // MOVE PARA FRENTE
+        currentPosition.z += speed * Time.deltaTime;
+
+        // ATUALIZA A POSICAO
         transform.position = Vector3.MoveTowards(transform.position, currentPosition, stepSpeed * Time.deltaTime);
+
+        
     }
 
     public void ChangeLane(int direction)
@@ -64,6 +75,16 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    public void Jump()
+    {
+        if (OnGround())
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+   
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
